@@ -2,7 +2,8 @@ SCSI Target Mode for LSISAS2 and LSISAS3 Host Bus Adapters
 ==========================================================
 
 This set of files provides support for adding SCSI Target Mode (STM) support to
-Yocto (https://www.yoctoproject.org/) based targets.
+Yocto (https://www.yoctoproject.org/) based targets using the SCST 
+(http://scst.sourceforge.net/) framework.
 
 If you want to use the SCST and Linux kernel patches outside of Yocto, look at
 the following two patch files:
