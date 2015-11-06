@@ -1,0 +1,1814 @@
+Index: Makefile
+===================================================================
+--- Makefile	(revision 6459)
++++ Makefile	(working copy)
+@@ -45,6 +45,7 @@
+ QLA_OLD_INI_DIR=qla2x00t
+ QLA_OLD_DIR=qla2x00t/qla2x00-target
+ LSI_DIR=mpt
++MPT3_DIR=mpt3
+ USR_DIR=usr/fileio
+ SRP_DIR=srpt
+ SCST_LOCAL_DIR=scst_local
+@@ -107,6 +108,12 @@
+ 	@echo "		lsi_install       : lsi target: install"
+ 	@echo "		lsi_uninstall     : lsi target: uninstall"
+ 	@echo ""
++	@echo "		mpt3              : make LSI MPT3 target"
++	@echo "		mpt3_clean        : mpt3 target: clean "
++	@echo "		mpt3_extraclean   : mpt3 target: clean + clean dependencies"
++	@echo "		mpt3_install      : mpt3 target: install"
++	@echo "		mpt3_uninstall    : mpt3 target: uninstall"
++	@echo ""
+ 	@echo "		srpt              : make SRP target"
+ 	@echo "		srpt_clean        : srp target: clean "
+ 	@echo "		srpt_extraclean   : srp target: clean + clean dependencies"
+@@ -151,6 +158,7 @@
+ 	@if [ -d $(QLA_DIR) ]; then cd $(QLA_DIR) && $(MAKE) $@; else if [ -d $(QLA_OLD_DIR) ]; then cd $(QLA_OLD_DIR) && $(MAKE) $@; fi fi
+ #	@if [ -d $(QLA_OLD_DIR) ]; then cd $(QLA_OLD_DIR) && $(MAKE) $@; fi
+ #	@if [ -d $(LSI_DIR) ]; then cd $(LSI_DIR) && $(MAKE) $@; fi
++	@if [ -d $(MPT3_DIR) ]; then cd $(MPT3_DIR) && $(MAKE) $@; fi
+ #	@if [ -d $(SRP_DIR) ]; then cd $(SRP_DIR) && $(MAKE) $@; fi
+ 	@if [ -d $(ISCSI_DIR) ]; then cd $(ISCSI_DIR) && $(MAKE) $@; fi
+ 	@if [ -d $(USR_DIR) ]; then cd $(USR_DIR) && $(MAKE) $@; fi
+@@ -163,6 +171,7 @@
+ 	@if [ -d $(QLA_DIR) ]; then cd $(QLA_DIR) && $(MAKE) $@; else if [ -d $(QLA_OLD_DIR) ]; then cd $(QLA_OLD_DIR) && $(MAKE) $@; fi fi
+ #	@if [ -d $(QLA_OLD_DIR) ]; then cd $(QLA_OLD_DIR) && $(MAKE) $@; fi
+ #	@if [ -d $(LSI_DIR) ]; then cd $(LSI_DIR) && $(MAKE) $@; fi
++	@if [ -d $(MPT3_DIR) ]; then cd $(MPT3_DIR) && $(MAKE) $@; fi
+ #	@if [ -d $(SRP_DIR) ]; then cd $(SRP_DIR) && $(MAKE) $@; fi
+ 	@if [ -d $(ISCSI_DIR) ]; then cd $(ISCSI_DIR) && $(MAKE) $@; fi
+ 	@if [ -d $(USR_DIR) ]; then cd $(USR_DIR) && $(MAKE) $@; fi
+@@ -175,6 +184,7 @@
+ 	@if [ -d $(QLA_DIR) ]; then cd $(QLA_DIR) && $(MAKE) $@; else if [ -d $(QLA_OLD_DIR) ]; then cd $(QLA_OLD_DIR) && $(MAKE) $@; fi fi
+ #	@if [ -d $(QLA_OLD_DIR) ]; then cd $(QLA_OLD_DIR) && $(MAKE) $@; fi
+ #	@if [ -d $(LSI_DIR) ]; then cd $(LSI_DIR) && $(MAKE) $@; fi
++	@if [ -d $(MPT3_DIR) ]; then cd $(MPT3_DIR) && $(MAKE) $@; fi
+ 	@if [ -d $(SRP_DIR) ]; then cd $(SRP_DIR) && $(MAKE) $@; fi
+ 	@if [ -d $(ISCSI_DIR) ]; then cd $(ISCSI_DIR) && $(MAKE) $@; fi
+ 	@if [ -d $(USR_DIR) ]; then cd $(USR_DIR) && $(MAKE) $@; fi
+@@ -189,6 +199,7 @@
+ 	@if [ -d $(QLA_OLD_INI_DIR) ]; then cd $(QLA_OLD_INI_DIR) && $(MAKE) $@; fi
+ 	@if [ -d $(QLA_OLD_DIR) ]; then cd $(QLA_OLD_DIR) && $(MAKE) $@; fi
+ #	@if [ -d $(LSI_DIR) ]; then cd $(LSI_DIR) && $(MAKE) $@; fi
++	@if [ -d $(MPT3_DIR) ]; then cd $(MPT3_DIR) && $(MAKE) $@; fi
+ 	@if [ -d $(SRP_DIR) ]; then cd $(SRP_DIR) && $(MAKE) $@; fi
+ 	@if [ -d $(ISCSI_DIR) ]; then cd $(ISCSI_DIR) && $(MAKE) $@; fi
+ 	@if [ -d $(USR_DIR) ]; then cd $(USR_DIR) && $(MAKE) $@; fi
+@@ -204,6 +215,7 @@
+ 	@if [ -d $(QLA_OLD_INI_DIR) ]; then cd $(QLA_OLD_INI_DIR) && $(MAKE) $@; fi
+ 	@if [ -d $(QLA_OLD_DIR) ]; then cd $(QLA_OLD_DIR) && $(MAKE) $@; fi
+ #	@if [ -d $(LSI_DIR) ]; then cd $(LSI_DIR) && $(MAKE) $@; fi
++	@if [ -d $(MPT3_DIR) ]; then cd $(MPT3_DIR) && $(MAKE) $@; fi
+ 	@if [ -d $(SRP_DIR) ]; then cd $(SRP_DIR) && $(MAKE) $@; fi
+ 	@if [ -d $(ISCSI_DIR) ]; then cd $(ISCSI_DIR) && $(MAKE) $@; fi
+ 	@if [ -d $(USR_DIR) ]; then cd $(USR_DIR) && $(MAKE) $@; fi
+@@ -332,6 +344,21 @@
+ lsi_extraclean:
+ 	cd $(LSI_DIR) && $(MAKE) extraclean
+ 
++mpt3:
++	cd $(MPT3_DIR) && $(MAKE) all
++
++mpt3_install:
++	cd $(MPT3_DIR) && $(MAKE) install
++
++mpt3_uninstall:
++	cd $(MPT3_DIR) && $(MAKE) uninstall
++
++mpt3_clean:
++	cd $(MPT3_DIR) && $(MAKE) clean
++
++mpt3_extraclean:
++	cd $(MPT3_DIR) && $(MAKE) extraclean
++
+ srpt:
+ 	cd $(SRP_DIR) && $(MAKE) all
+ 
+@@ -532,6 +559,7 @@
+ 	qla qla_install qla_uninstall qla_clean qla_extraclean \
+ 	qla_old qla_old_install qla_old_uninstall qla_old_clean qla_old_extraclean \
+ 	lsi lsi_install lsi_uninstall lsi_clean lsi_extraclean \
++    mpt3 mpt3_install mpt3_uninstall mpt3_clean mpt3_extraclean \
+ 	iscsi iscsi_install iscsi_uninstall iscsi_clean iscsi_extraclean \
+ 	emulex emulex_install emulex_uninstall emulex_clean emulex_extraclean \
+ 	scst scst_install scst_uninstall scst_clean scst_extraclean \
+Index: mpt/Makefile
+===================================================================
+--- mpt/Makefile	(revision 6459)
++++ mpt/Makefile	(working copy)
+@@ -43,8 +43,8 @@
+   else
+     ifeq ($(KERNELRELEASE),)
+       KVER := $(strip $(shell \
+-	cat $(KDIR)/include/config/kernel.release 2>/dev/null || \
+-	make -s -C $(KDIR) kernelversion))
++  	  cat $(KDIR)/include/config/kernel.release 2>/dev/null || \
++	  make -s -C $(KDIR) kernelversion))
+     else
+       KVER := $(KERNELRELEASE)
+     endif
+Index: mpt3/Makefile
+===================================================================
+--- mpt3/Makefile	(revision 0)
++++ mpt3/Makefile	(working copy)
+@@ -0,0 +1,120 @@
++#  This program is free software; you can redistribute it and/or
++#  modify it under the terms of the GNU General Public License
++#  as published by the Free Software Foundation, version 2
++#  of the License.
++#
++#  This program is distributed in the hope that it will be useful,
++#  but WITHOUT ANY WARRANTY; without even the implied warranty of
++#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++#  GNU General Public License for more details.
++#
++#
++# Main targets:
++#    all (the default) : make all
++#    clean             : clean files
++#    extraclean        : clean + clean dependencies
++#    install           : install
++#    uninstall         : uninstall
++#
++# Notes :
++#    - install and uninstall must be made as root
++#
++
++ifndef PREFIX
++	PREFIX=/usr/local
++endif
++
++
++
++SCST_INC_DIR := $(SUBDIRS)/../scst/include
++SCST_DIR := $(shell pwd)/../scst/src
++
++EXTRA_CFLAGS += -I$(SCST_INC_DIR)
++
++EXTRA_CFLAGS += -DCONFIG_SCST_EXTRACHECKS
++#EXTRA_CFLAGS += -DCONFIG_SCST_TRACING
++EXTRA_CFLAGS += -DCONFIG_SCST_DEBUG
++#EXTRA_CFLAGS += -DDEBUG_WORK_IN_THREAD
++
++ifeq ($(KVER),)
++  $(warning mpt3_scst KVER empty)
++  ifeq ($(KDIR),)
++    KVER := $(shell uname -r)
++    KDIR := /lib/modules/$(KVER)/build
++  else
++    ifeq ($(KERNELRELEASE),)
++      KVER := $(strip $(shell \
++	  cat $(KDIR)/include/config/kernel.release 2>/dev/null || \
++	  make -s -C $(KDIR) kernelversion))
++	else
++      KVER := $(KERNELRELEASE)
++    endif
++  endif
++else
++  $(warning mpt3_scst KVER is $(KVER))
++  ifeq ($(KDIR),)
++    KDIR := /lib/modules/$(KVER)/build
++    $(warning mpt3_scst KDIR is now $(KDIR))
++  endif
++endif
++
++ifeq ($(INSTALL_MOD_PATH),)
++  $(warning mpt3_scst setting INSTALL_MOD_PATH to $(DESTDIR))
++  export INSTALL_MOD_PATH := $(DESTDIR)
++else
++  $(warning mpt3_scst INSTALL_MOD_PATH is $(DESTDIR))
++endif
++
++INSTALL_DIR := $(INSTALL_MOD_PATH)/lib/modules/$(KVER)/extra
++LSI_INC_DIR := $(KDIR)/drivers/scsi/mpt3sas
++EXTRA_CFLAGS += -I$(LSI_INC_DIR)
++
++ifneq ($(PATCHLEVEL),)
++obj-m += mpt3_scst.o
++else
++######### BEGIN OUT-OF-TREE RULES #########
++
++all: Modules.symvers Module.symvers
++	$(MAKE) -C $(KDIR) SUBDIRS=$(shell pwd) BUILD_INI=m
++
++tgt: Modules.symvers Module.symvers
++	$(MAKE) -C $(KDIR) SUBDIRS=$(shell pwd) BUILD_INI=n
++
++install: all
++	$(MAKE) -C $(KDIR) SUBDIRS=$(shell pwd) BUILD_INI=m \
++		$$([ -n "$(DESTDIR)$(INSTALL_MOD_PATH)" ] && echo DEPMOD=true) \
++		modules_install
++
++SCST_MOD_VERS := $(shell ls $(SCST_DIR)/Modules.symvers 2>/dev/null)
++ifneq ($(SCST_MOD_VERS),)
++Modules.symvers: $(SCST_DIR)/Modules.symvers
++	cp $(SCST_DIR)/Modules.symvers .
++else
++.PHONY: Modules.symvers
++endif
++
++# It's renamed in 2.6.18
++SCST_MOD_VERS := $(shell ls $(SCST_DIR)/Module.symvers 2>/dev/null)
++ifneq ($(SCST_MOD_VERS),)
++Module.symvers: $(SCST_DIR)/Module.symvers
++	cp $(SCST_DIR)/Module.symvers .
++else
++.PHONY: Module.symvers
++endif
++
++uninstall:
++	rm -f $(INSTALL_DIR)/mpt3_scst.ko
++	-/sbin/depmod -b $(INSTALL_MOD_PATH)/ -a $(KVER)
++
++########## END OUT-OF-TREE RULES ##########
++endif
++
++clean:
++	rm -f *.o *.ko .*.cmd *.mod.c .*.d .depend *~ Modules.symvers \
++		Module.symvers Module.markers modules.order
++	rm -rf .tmp_versions
++
++extraclean: clean
++	rm -f *.orig *.rej
++
++.PHONY: all tgt install uninstall clean extraclean
+Index: mpt3/mpt3_scst.c
+===================================================================
+--- mpt3/mpt3_scst.c	(revision 0)
++++ mpt3/mpt3_scst.c	(working copy)
+@@ -0,0 +1,1318 @@
++/**
++ *
++ * @file mpt3scst_base.c
++ * @brief SCST driver for LSI FusionMPT2.5 (SAS 3.0) controllers
++ * @author Theodore Vaida
++ *
++ * @Copyright � 2015 Exact Assembly, LLC.  All Rights Reserved.
++ *
++ *	 Redistribution and use in source and binary forms, with or without modification,
++ *	are permitted provided that the following conditions are met:
++ *
++ *	1. Redistributions of source code must retain the above copyright notice,
++ *		this list of conditions and the following disclaimer.
++ *
++ *	2. Redistributions in binary form must reproduce the above copyright notice,
++ *		this list of conditions and the following disclaimer in the documentation and/or
++ *		other materials provided with the distribution.
++ *
++ *	3. The name of the author may not be used to endorse or promote products derived from this
++ *		software without specific prior written permission.
++ *
++ *	THIS SOFTWARE IS PROVIDED BY [LICENSOR] "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,
++ *	BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ *	PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
++ *	INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ *	PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ *	INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ *	LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
++ *	OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ *
++ *
++ * @details This module deals with the mpt3sas specifics of SCSI Target mode
++ *
++ */
++
++#include <linux/moduleparam.h>
++#include <linux/module.h>
++#include <linux/dma-mapping.h>
++#include <linux/pci.h>
++#include <linux/scatterlist.h>
++#include <linux/spinlock.h>
++
++#include "mpt3_scst.h"
++
++
++#define MPT3SCST_DRIVER_AUTHOR        "Exact Assembly, LLC <support@xassembly.com>"
++#define MPT3SCST_DESCRIPTION          "LSI MPT2.5/SAS3.0 SCSI Target Mode SCST driver"
++#define MPT3SCST_MAJOR_VERSION		01
++#define MPT3SCST_MINOR_VERSION		100
++#define MPT3SCST_BUILD_VERSION		00
++#define MPT3SCST_RELEASE_VERSION	00
++#define MPT3SCST_DRIVER_VERSION		"01.100.00.00"
++
++MODULE_AUTHOR(MPT3SCST_DRIVER_AUTHOR);
++MODULE_DESCRIPTION(MPT3SCST_DESCRIPTION);
++MODULE_LICENSE("GPL");
++MODULE_VERSION(MPT3SCST_DRIVER_VERSION);
++
++#define DPRINTK(fmt, args...) if (mpt3_scst_debug) printk(KERN_DEBUG "%s: " fmt, \
++                                    __FUNCTION__ , ## args)
++
++#ifdef VERBOSE
++#define VDPRINTK(fmt, args...) printk(KERN_DEBUG "%s: " fmt, \
++                                    __FUNCTION__ , ## args)
++#else
++#define VDPRINTK(fmt, args...)
++#endif
++
++int mpt3_scst_debug = 0;
++module_param(mpt3_scst_debug, int, S_IRUGO|S_IWUSR);
++MODULE_PARM_DESC(mpt3_scst_debug, " enable debugging output ");
++
++static char *_mpt3scst_vendor = "none";
++module_param(_mpt3scst_vendor, charp, 0);
++MODULE_PARM_DESC(_mpt3scst_vendor,"Vendor ID");
++
++// from the LSI headers:
++/*
++ * reset phases
++ */
++#define MPT3_IOC_PRE_RESET		1 /* prior to host reset */
++#define MPT3_IOC_AFTER_RESET		2 /* just after host reset */
++#define MPT3_IOC_DONE_RESET		3 /* links re-initialized */
++
++
++static mpt3scst_dd_t gmpt3scst_dd_t;
++
++static inline struct mpt3_init*
++_devh_to_init(struct mpt3_ioc* ioc, u16 InitiatorDevHandle) {
++    struct mpt3_init* initptr;
++    unsigned long flags;
++    
++    // find the right session to handle this frame
++    spin_lock_irqsave(&ioc->lock,flags);
++    list_for_each_entry(initptr,&ioc->init_list,listh)
++    {
++        if (InitiatorDevHandle == initptr->InitiatorDevHandle)
++        {
++            spin_unlock_irqrestore(&ioc->lock,flags);
++            return initptr;
++        }
++    }
++    spin_unlock_irqrestore(&ioc->lock,flags);
++    return NULL;
++}
++
++static inline struct mpt3_cmd*
++_ioindex_to_cmd(struct mpt3_ioc *ioc, u16 IoIndex) {
++    struct mpt3_cmd *cmdptr;
++    unsigned long flags;
++    
++    spin_lock_irqsave(&ioc->lock,flags);
++    list_for_each_entry(cmdptr,&ioc->cmd_list,listh) {
++        if ( cmdptr->IoIndex == IoIndex )
++        {
++            spin_unlock_irqrestore(&ioc->lock,flags);
++            return cmdptr;
++        }
++    }
++    spin_unlock_irqrestore(&ioc->lock,flags);
++    return NULL;
++}
++
++/**
++ * called by either _scst_xmit_reponse (if no READ data) or
++ * by _stm_assist_complete if AUTO_GOOD was not set in the 
++ * assist command
++ */
++static int
++_send_status(struct mpt3_cmd* cmd) {
++    MPT3STM_CMD_BUFF *cmdbuf = NULL;
++    int mpi_rc;
++    u8 StatusFlags = 0;
++
++    BUG_ON(!cmd);
++    BUG_ON(!cmd->init);
++    BUG_ON(!cmd->init->ioc);
++    
++    DPRINTK("C:%p I:%04x _send_status()\n",cmd,cmd->IoIndex);
++    
++    cmdbuf = mpt3stm_get_cmdbuff(cmd->init->ioc->iocidx,cmd->IoIndex);
++    BUG_ON(!cmdbuf);
++    
++    // initialize reply buffer (SAS frame for STATUS/RESPONSE) and SGL header
++    memset(&cmdbuf->rsp,0,sizeof(union _rsp_frame));
++    
++    if (scst_cmd_get_sense_buffer_len(cmd->scst_cmd)) {
++        int sense_length = scst_cmd_get_sense_buffer_len(cmd->scst_cmd);
++        uint8_t *sense_buf = scst_cmd_get_sense_buffer(cmd->scst_cmd);
++        
++        DPRINTK("C:%p I:%04x returning %d sense\n",cmd,cmd->IoIndex,sense_length);
++        
++        if (sense_length >
++            (MPT3STM_RSP_BYTES - sizeof(Mpi2TargetSspRspIu_t))) {
++            DPRINTK("C:%p I:%04x WARNING!!! oversize sense buffer\n",cmd,cmd->IoIndex);
++            sense_length = (MPT3STM_RSP_BYTES - sizeof(Mpi2TargetSspRspIu_t));
++        }
++        
++        cmdbuf->rsp.rspiu.DataPres = SAS_DATAPRES_SENSE;
++        cmdbuf->rsp.rspiu.SenseDataLength = cpu_to_be32( sense_length );
++        cmdbuf->rsp.rspiu.ResponseDataLength = 0;
++
++        // copy the sense data into the response IU
++        memcpy(cmdbuf->rsp.rspiu.ResponseSenseData,
++               sense_buf,
++               sense_length);
++    }
++    else {
++        // No sense
++        cmdbuf->rsp.rspiu.DataPres = SAS_DATAPRES_NODATA;
++        cmdbuf->rsp.rspiu.SenseDataLength = cpu_to_be32(0);
++        cmdbuf->rsp.rspiu.ResponseDataLength = cpu_to_be32(0);
++        if ( !cmdbuf->rsp.rspiu.Status ) {
++            DPRINTK("C:%p I:%04x using AUTO_GOOD\n",cmd,cmd->IoIndex);
++            // status code SUCCESS, no resp data or sense data
++            StatusFlags |= MPI2_TSS_FLAGS_AUTO_GOOD_STATUS;
++        }
++        else {
++            cmdbuf->rsp.rspiu.Status = scst_cmd_get_status(cmd->scst_cmd);
++            DPRINTK("C:%p I:%04x Status:%02x\n",cmd,cmd->IoIndex,
++                     cmdbuf->rsp.rspiu.Status);
++        }
++    }
++
++    DPRINTK("C:%p I:%04x issuing TARGET_STATUS\n",cmd,cmd->IoIndex);
++    
++    mpi_rc = mpt3stm_send_status(cmd->init->ioc->iocidx,
++                                 StatusFlags,
++                                 be16_to_cpu(cmdbuf->cmd.command.Tag),
++                                 be16_to_cpu(cmdbuf->cmd.command.InitiatorConnectionTag),
++                                 cmd->IoIndex);
++    switch (mpi_rc) {
++        case 0:
++            break;
++        case -EAGAIN:
++            pr_warn(MPT3SCST_FMT "MPT command buffers full for mpt3stm_send_status() I:%04x at %s:%d/%s()!\n",
++                    cmd->IoIndex,__FILE__, __LINE__, __func__);
++            return SCST_TGT_RES_QUEUE_FULL;
++            break;
++        default:
++            pr_err(MPT3SCST_FMT "failed mpt3stm_assist(%d) for I:%04x at %s:%d/%s()!\n",
++                   mpi_rc,cmd->IoIndex,__FILE__, __LINE__, __func__);
++            scst_set_delivery_status(cmd->scst_cmd, SCST_CMD_DELIVERY_FAILED);
++            return SCST_TGT_RES_FATAL_ERROR;
++    }
++    
++    //    // Success! horray
++    return SCST_TGT_RES_SUCCESS;
++}
++
++static int
++_send_data(struct mpt3_cmd *cmd)
++{
++    u8 AssistFlags = MPI2_TARGET_ASSIST_FLAGS_DATA_DIRECTION;
++    // This buffer is for sending data (to a remote initiator)
++    int mpi_rc;
++
++    DPRINTK("C:%p I:%04x DATA_READ\n", cmd,cmd->IoIndex);
++    
++    // The first TARGET_ASSIST command must always have a 0 here
++    cmd->SequenceNumber = 0;
++    
++    cmd->sg_dir = scst_cmd_get_data_direction(cmd->scst_cmd);
++    cmd->sg = scst_cmd_get_sg(cmd->scst_cmd);
++    cmd->sg_cnt = scst_cmd_get_sg_cnt(cmd->scst_cmd);
++    cmd->dma_size = scst_cmd_get_adjusted_resp_data_len(cmd->scst_cmd);
++    
++    DPRINTK("C:%p I:%04x issuing TARGET_ASSIST (send)\n",cmd,cmd->IoIndex);
++    // pass the baton to MPT
++    mpi_rc = mpt3stm_assist(cmd->init->ioc->iocidx,
++                            AssistFlags,
++                            cmd->QueueTag,
++                            cmd->InitiatorConnectionTag,
++                            cmd->IoIndex,
++                            cmd->SequenceNumber,
++                            0, // SkipCount
++                            cmd->dma_size,
++                            cmd->sg,
++                            cmd->sg_cnt,
++                            DMA_TO_DEVICE);
++    switch (mpi_rc) {
++        case 0:
++            // Success! horray
++            break;
++        case -EAGAIN:
++            pr_warn(MPT3SCST_FMT "MPT command buffers full for mpt3stm_assist() I:%04x at %s:%d/%s()!\n",
++                    cmd->IoIndex,__FILE__, __LINE__, __func__);
++            return SCST_TGT_RES_QUEUE_FULL;
++            break;
++        default:
++            pr_err(MPT3SCST_FMT "failed mpt3stm_assist(%d) at %s:%d/%s()!\n",
++                   mpi_rc,__FILE__, __LINE__, __func__);
++            scst_set_delivery_status(cmd->scst_cmd, SCST_CMD_DELIVERY_FAILED);
++            return SCST_TGT_RES_FATAL_ERROR;
++    }
++    return SCST_TGT_RES_SUCCESS;
++}
++
++/*
++ * This function is equivalent to the SCSI
++ * queuecommand. The target should transmit the response
++ * buffer and the status in the scst_cmd struct.
++ * The expectation is that this executing this command is NON-BLOCKING.
++ * If it is blocking, consider to set threads_num to some none 0 number.
++ *
++ * After the response is actually transmitted, the target
++ * should call the scst_tgt_cmd_done() function of the
++ * mid-level, which will allow it to free up the command.
++ * Returns one of the SCST_TGT_RES_* constants.
++ *
++ * Pay attention to "atomic" attribute of the cmd, which can be get
++ * by scst_cmd_atomic(): it is true if the function called in the
++ * atomic (non-sleeping) context.
++ *
++ * MUST HAVE
++ */
++static int
++_scst_xmit_response(struct scst_cmd *scst_cmd)
++{
++    struct mpt3_cmd* cmd = scst_cmd_get_tgt_priv(scst_cmd);
++    
++    BUG_ON(!cmd);
++    DPRINTK("C:%p I:%04x xmit_response\n",cmd,cmd->IoIndex);
++    
++    // as specified in SCST documentation - check for abort and cleanup
++    if (scst_cmd_aborted_on_xmit(scst_cmd)) {
++        pr_err(MPT3SCST_FMT "C:%p I:%04x scst_cmd_aborted_on_xmit at %s:%d/%s()!\n",
++               cmd,cmd->IoIndex,
++               __FILE__, __LINE__, __func__);
++        
++        scst_set_delivery_status(scst_cmd, SCST_CMD_DELIVERY_ABORTED);
++        scst_tgt_cmd_done(scst_cmd, SCST_CONTEXT_SAME);
++        // Not sure if the below is correct? Should this be a "success" that
++        // we aborted it as required?
++        return SCST_TGT_RES_FATAL_ERROR;
++    }
++    
++    if ( SCST_DATA_READ == scst_cmd_get_data_direction(scst_cmd) ) {
++        DPRINTK("C:%p I:%04x jump to _send_data()\n",cmd,cmd->IoIndex);
++        return _send_data(cmd);
++    }
++    else if ( (SCST_DATA_NONE == scst_cmd_get_data_direction(scst_cmd)) ||
++              (SCST_DATA_WRITE == scst_cmd_get_data_direction(scst_cmd)) ) {
++        if ( !scst_cmd_get_is_send_status(scst_cmd) ) {
++            DPRINTK("C:%p I:%04x !is_send_status\n",cmd,cmd->IoIndex);
++            return SCST_TGT_RES_SUCCESS;
++        }
++        DPRINTK("C:%p I:%04x jump to _send_status()\n",cmd,cmd->IoIndex);
++        // proceed to status
++        return _send_status(cmd);
++    }
++    
++    // Not READ, WRITE or NONE...
++    pr_err(MPT3SCST_FMT "C:%p I:%04x unsupported data direction (%d) at %s:%d/%s()!\n",
++           cmd,cmd->IoIndex, scst_cmd_get_data_direction(scst_cmd),
++           __FILE__, __LINE__, __func__);
++    return SCST_TGT_RES_FATAL_ERROR;
++}
++
++/*
++ * This function informs the driver that data
++ * buffer corresponding to the said command have now been
++ * allocated and it is OK to receive data for this command.
++ * This function is necessary because a SCSI target does not
++ * have any control over the commands it receives. Most lower
++ * level protocols have a corresponding function which informs
++ * the initiator that buffers have been allocated e.g., XFER_
++ * RDY in Fibre Channel. After the data is actually received
++ * the low-level driver needs to call scst_rx_data() in order to
++ * continue processing this command.
++ * Returns one of the SCST_TGT_RES_* constants.
++ *
++ * This command is expected to be NON-BLOCKING.
++ * If it is blocking, consider to set threads_num to some none 0 number.
++ *
++ * Pay attention to "atomic" attribute of the cmd, which can be get
++ * by scst_cmd_atomic(): it is true if the function called in the
++ * atomic (non-sleeping) context.
++ *
++ * OPTIONAL
++ */
++static int
++_scst_rdy_to_xfer(struct scst_cmd *scst_cmd)
++{
++    struct mpt3_cmd *cmd = scst_cmd_get_tgt_priv(scst_cmd);
++    u8 AssistFlags = 0;
++    int mpi_rc;
++    int scst_status = SCST_TGT_RES_SUCCESS;
++    
++    DPRINTK("C:%p I:%04x DATA_WRITE\n", cmd,cmd->IoIndex);
++    cmd->SequenceNumber = 0;
++    
++    // This buffer is for receiving data (from a remote initiator)
++    //AssistFlags != MPI2_TARGET_ASSIST_FLAGS_DATA_DIRECTION;
++    
++    cmd->sg_dir = scst_cmd_get_data_direction(cmd->scst_cmd);
++    if ( SCST_DATA_WRITE != cmd->sg_dir)
++    {
++        DPRINTK("C:%p I:%04x !DATA_WRITE in rdy_to_xfer?\n", cmd,cmd->IoIndex);
++        return SCST_TGT_RES_SUCCESS;
++    }
++    scst_cmd_get_write_fields(cmd->scst_cmd,
++                              &cmd->sg,
++                              &cmd->sg_cnt);
++    cmd->dma_size = scst_cmd_get_bufflen(cmd->scst_cmd);
++    
++    DPRINTK("C:%p I:%04x issuing TARGET_ASSIST (receive)\n",cmd,cmd->IoIndex);
++    // pass the baton to MPT
++    mpi_rc = mpt3stm_assist(cmd->init->ioc->iocidx,
++                            AssistFlags,
++                            cmd->QueueTag,
++                            cmd->InitiatorConnectionTag,
++                            cmd->IoIndex,
++                            cmd->SequenceNumber,
++                            0, // SkipCount
++                            cmd->dma_size,
++                            cmd->sg,
++                            cmd->sg_cnt,
++                            DMA_FROM_DEVICE);
++    switch (mpi_rc) {
++        case 0:
++            // Success! horray
++            break;
++        case -EAGAIN:
++            pr_warn(MPT3SCST_FMT "MPT command buffers full for mpt3stm_assist() I:%04x at %s:%d/%s()!\n",
++                    cmd->IoIndex,__FILE__, __LINE__, __func__);
++            scst_status = SCST_TGT_RES_QUEUE_FULL;
++            break;
++        default:
++            pr_err(MPT3SCST_FMT "failed mpt3stm_assist(%d) at %s:%d/%s()!\n",
++                   mpi_rc,__FILE__, __LINE__, __func__);
++            scst_status = SCST_TGT_RES_FATAL_ERROR;
++    }
++    DPRINTK("C:%p I:%04x (receive):%d posted\n",cmd,cmd->IoIndex,scst_status);
++    return scst_status;
++}
++
++/*
++ * Called to notify the driver that the command is about to be freed.
++ * Necessary, because for aborted commands xmit_response() could not
++ * be called. Could be called on IRQ context.
++ *
++ * This callback is called when the last reference to cmd is dropped,
++ * which can be much later after scst_tgt_cmd_done() called by the
++ * target driver, so it is not recommended that the target driver
++ * clean hardware or connection related cmd resources in this callback.
++ * It is recommended to clean them before calling scst_tgt_cmd_done()
++ * instead.
++ *
++ * OPTIONAL
++ */
++//static void
++//_scst_on_free_cmd(struct scst_cmd *scst_cmd)
++//{
++//    struct mpt3_cmd* cmd = scst_cmd_get_tgt_priv(scst_cmd);
++//    unsigned long flags;
++//    
++//    BUG_ON(!cmd);
++//    printk("C:%p I:%04x _scst_on_free_cmd\n",cmd->IoIndex);
++//
++//}
++
++/*
++ * This function informs the driver that the corresponding task
++ * management function has been completed, i.e. all the corresponding
++ * commands completed and freed. No return value expected.
++ *
++ * This function is expected to be NON-BLOCKING.
++ *
++ * Called without any locks held from a thread context.
++ *
++ * MUST HAVE if the target supports task management.
++ */
++static void
++_scst_task_mgmt_fn_done(struct scst_mgmt_cmd *mgmt_cmd)
++{
++    DPRINTK("mpt3_scst: %s()\n",__func__);
++}
++
++/*
++ * This function allows to enable or disable particular target.
++ * A disabled target doesn't receive and process any SCSI commands.
++ *
++ * SHOULD HAVE to avoid race when there are connected initiators,
++ * while target not yet completed the initial configuration. In this
++ * case the too early connected initiators would see not those devices,
++ * which they intended to see.
++ *
++ * If you are sure your target driver doesn't need enabling target,
++ * you should set enabled_attr_not_needed in 1.
++ */
++static int
++_scst_enable_tgt(struct scst_tgt *scst_tgt, bool enable)
++{
++    struct mpt3_ioc *ioc = scst_tgt_get_tgt_priv(scst_tgt);
++    BUG_ON(!ioc);
++    return mpt3stm_enable(ioc->iocidx,enable);
++}
++
++/*
++ * This function shows if particular target is enabled or not.
++ *
++ * SHOULD HAVE, see above why.
++ */
++static bool
++_scst_is_tgt_enabled(struct scst_tgt *scst_tgt)
++{
++    struct mpt3_ioc *ioc = scst_tgt_get_tgt_priv(scst_tgt);
++    BUG_ON(!ioc);
++    return mpt3stm_is_enabled(ioc->iocidx);
++}
++
++/*
++ * This function should free up the resources allocated to the device.
++ * The function should return 0 to indicate successful release
++ * or a negative value if there are some issues with the release.
++ * In the current version the return value is ignored.
++ *
++ * MUST HAVE
++ */
++static int
++_scst_release(struct scst_tgt *scst_tgt)
++{
++    DPRINTK("mpt3_scst: %s()\n",__func__);
++    return 0;
++}
++
++/*
++ * This function returns in tr_id the corresponding to sess initiator
++ * port TransportID in the form as it's used by PR commands, see
++ * "Transport Identifiers" in SPC. Space for the initiator port
++ * TransportID must be allocated via kmalloc(). Caller supposed to
++ * kfree() it, when it isn't needed anymore.
++ *
++ * If sess is NULL, this function must return TransportID PROTOCOL
++ * IDENTIFIER for the requested target.
++ *
++ * Returns 0 on success or negative error code otherwise.
++ *
++ * SHOULD HAVE, because it's required for Persistent Reservations.
++ */
++//int (*get_initiator_port_transport_id)(struct scst_tgt *tgt,
++//                                       struct scst_session *sess, uint8_t **transport_id);
++
++
++static void
++_process_task_frame(struct mpt3_cmd *cmd)
++{
++    unsigned long flags;
++    int scst_task_function = 0;
++    int rc;
++    
++    DPRINTK(MPT3SCST_FMT "task IU from dh:%04x @%016llx\n",
++           cmd->init->InitiatorDevHandle,cmd->init->SASAddress);
++    
++    
++    switch (cmd->TaskManagementFunction) {
++        case SAS_SSP_TSKMGMTFUNCTION_ABORT_TASK:
++            scst_task_function = SCST_ABORT_TASK;
++            break;
++        case SAS_SSP_TSKMGMTFUNCTION_ABORT_TASK_SET:
++            scst_task_function = SCST_ABORT_TASK_SET;
++            break;
++        case SAS_SSP_TSKMGMTFUNCTION_CLEAR_TASK_SET:
++            scst_task_function = SCST_CLEAR_TASK_SET;
++            break;
++        case SAS_SSP_TSKMGMTFUNCTION_CLEAR_ACA:
++            scst_task_function = SCST_CLEAR_ACA;
++            break;
++        case SAS_SSP_TSKMGMTFUNCTION_LOGICAL_UNIT_RESET:
++            scst_task_function = SCST_LUN_RESET;
++            break;
++        case SAS_SSP_TSKMGMTFUNCTION_I_T_NEXUS_RESET:
++            scst_task_function = SCST_TARGET_RESET;
++            break;
++        case SAS_SSP_TSKMGMTFUNCTION_QUERY_TASK:
++        case SAS_SSP_TSKMGMTFUNCTION_QUERY_TASK_SET:
++        case SAS_SSP_TSKMGMTFUNCTION_QUERY_ASYNCHRONOUS_EVENT:
++        default:
++            pr_err(MPT3SCST_FMT "invalid task:%02x at %s:%d/%s()!\n",
++                   cmd->TaskManagementFunction,__FILE__, __LINE__, __func__);
++            break;
++    }
++    switch (scst_task_function) {
++        case SCST_ABORT_TASK:
++            rc = scst_rx_mgmt_fn_tag(cmd->init->scst_sess,
++                                     scst_task_function,
++                                     cmd->QueueTag,
++                                     SCST_NON_ATOMIC, // we are workq context
++                                     cmd);
++            break;
++        default:
++            rc = scst_rx_mgmt_fn_lun(cmd->init->scst_sess,
++                                     scst_task_function,
++                                     &cmd->LogicalUnitNumber[0],
++                                     8, // size of LUN
++                                     SCST_NON_ATOMIC, // we are workq context
++                                     cmd);
++            break;
++    }
++    if (rc)
++    {
++        pr_err(MPT3SCST_FMT "failed scst_rx_mgmt_fn_tag/lun (%d) at %s:%d/%s()!\n",
++               rc,__FILE__, __LINE__, __func__);
++        spin_lock_irqsave(&cmd->init->ioc->lock,flags);
++        list_del(&cmd->listh);
++        spin_unlock_irqrestore(&cmd->init->ioc->lock,flags);
++        
++        kfree(cmd);
++        return;
++    }
++}
++
++static void
++_process_command_frame(struct mpt3_cmd *cmd)
++{
++    unsigned long flags;
++    DPRINTK("C:%p I:%04x command IU from dh:%04x @%016llx\n",
++           cmd,cmd->IoIndex,cmd->init->InitiatorDevHandle,cmd->init->SASAddress);
++    
++    cmd->scst_cmd = scst_rx_cmd(cmd->init->scst_sess,
++                                &cmd->LogicalUnitNumber[0],
++                                8, // lun length
++                                &cmd->CDB[0],
++                                16,
++                                SCST_NON_ATOMIC); // workq context
++    if (!cmd->scst_cmd)
++    {
++        pr_err(MPT3SCST_FMT "failed scst_rx_cmd at %s:%d/%s()!\n",
++               __FILE__, __LINE__, __func__);
++        spin_lock_irqsave(&cmd->init->ioc->lock,flags);
++        list_del(&cmd->listh);
++        spin_unlock_irqrestore(&cmd->init->ioc->lock,flags);
++        kfree(cmd);
++        return;
++    }
++    // set SCST additional information from command frame
++    scst_cmd_set_tag(cmd->scst_cmd,cmd->QueueTag);
++    scst_cmd_set_tgt_priv(cmd->scst_cmd,cmd);
++    
++    // Allow SCST to continue processing this request
++    scst_cmd_init_done(cmd->scst_cmd,SCST_CONTEXT_DIRECT);
++}
++
++static void
++_process_cmd_on_workq(struct work_struct *work) {
++    struct mpt3_cmd* cmd = container_of(work,struct mpt3_cmd,work_entry);
++    switch (cmd->FrameType) {
++        case SAS_SSP_FRAMETYPE_CMD:
++            _process_command_frame(cmd);
++            break;
++        case SAS_SSP_FRAMETYPE_TASK:
++            _process_task_frame(cmd);
++            break;
++    }
++}
++
++static void
++_stm_command_received(u8 iocidx, u8 PhyNum, u16 IoIndex, u16 InitiatorDevHandle)
++{
++    struct mpt3_ioc *ioc = mpt3stm_ioc_get_priv(iocidx);
++    struct mpt3_init *init = NULL;
++    MPT3STM_CMD_BUFF* cmdbuf = mpt3stm_get_cmdbuff(iocidx, IoIndex);
++    struct mpt3_cmd *cmd = NULL;
++    unsigned long flags;
++
++    BUG_ON(!ioc);
++    BUG_ON(!cmdbuf);
++    
++    init = _devh_to_init(ioc,InitiatorDevHandle);
++    if (!init) {
++        pr_warn(MPT3SCST_FMT "failed to find a session for dh:%04x at %s:%d/%s()!\n",
++               InitiatorDevHandle,
++               __FILE__, __LINE__, __func__);
++        return;
++    }
++    
++    cmd = kzalloc(sizeof(*cmd),GFP_ATOMIC);
++    if (!cmd) {
++        pr_err(MPT3SCST_FMT "failed kzalloc at %s:%d/%s()!\n",
++               __FILE__, __LINE__, __func__);
++        return;
++    }
++    cmd->init = init;
++    cmd->IoIndex = IoIndex;
++    
++    // pull common fields from cmdbuf (SAS IU) - frame is ANSI so BigEndian!!!
++    cmd->InitiatorConnectionTag = be16_to_cpu(cmdbuf->cmd.command.InitiatorConnectionTag);
++    cmd->FrameType = cmdbuf->cmd.command.FrameType;
++    cmd->SSPFlags = be16_to_cpu(cmdbuf->cmd.command.Flags);
++    cmd->TargetPortTransferTag = be16_to_cpu(cmdbuf->cmd.command.TargetPortTransferTag);
++    cmd->QueueTag = be16_to_cpu(cmdbuf->cmd.command.Tag);
++    cmd->DataOffset = be32_to_cpu(cmdbuf->cmd.command.DataOffset);
++    memcpy(cmd->LogicalUnitNumber,cmdbuf->cmd.command.LogicalUnitNumber,8);
++    
++    // determine if this is a Command IU or a Task IU and start processing
++    if ( SAS_SSP_FRAMETYPE_CMD == cmd->FrameType ) {
++        cmd->TaskAttribute = cmdbuf->cmd.command.TaskAttribute;
++        if (cmdbuf->cmd.command.AdditionalCDBLength)
++            pr_warn(MPT3SCST_FMT "command IU idx:%04x from %04x has AdditionalCDB bytes NOT SUPPORTED at %s:%d/%s()!\n",
++                   IoIndex, InitiatorDevHandle, __FILE__, __LINE__, __func__);
++        memcpy(cmd->CDB,cmdbuf->cmd.command.CDB,16);
++    }
++    else if  ( SAS_SSP_FRAMETYPE_TASK == cmdbuf->cmd.command.FrameType ) {
++        cmd->TaskManagementFunction = cmdbuf->cmd.task.TaskManagementFunction;
++        cmd->ManagedTaskTag = cmdbuf->cmd.task.ManagedTaskTag;
++    }
++    else {
++        pr_err(MPT3SCST_FMT "Invalid FrameType:%02x from dh:%04x at %s:%d/%s()!\n",
++               cmdbuf->cmd.command.FrameType, InitiatorDevHandle,
++               __FILE__, __LINE__, __func__);
++        return;
++    }
++    
++    if ( MPT3SCST_INIT_STATE_READY != atomic_read(&init->state))
++    {
++        spin_lock_irqsave(&init->ioc->lock,flags);
++        list_add(&cmd->listh,&init->ioc->delayed_cmds);
++        spin_unlock_irqrestore(&init->ioc->lock,flags);
++        pr_warn(MPT3SCST_FMT "deferred processing for io:%04x dh:%04x at %s:%d/%s()!\n",
++                IoIndex,InitiatorDevHandle,
++                __FILE__, __LINE__, __func__);
++        return;
++    }
++    
++    INIT_WORK(&cmd->work_entry, _process_cmd_on_workq);
++
++    spin_lock_irqsave(&init->ioc->lock,flags);
++    list_add(&cmd->listh,&init->ioc->cmd_list);
++    queue_work(init->workq, &cmd->work_entry);
++    spin_unlock_irqrestore(&init->ioc->lock,flags);
++}
++
++static void
++_process_status_complete_on_workq(struct work_struct *work) {
++    struct mpt3_cmd* cmd = container_of(work,struct mpt3_cmd,work_entry);
++    unsigned long flags;
++    int rc;
++    
++    if (!cmd->scst_cmd) {
++        pr_err(MPT3SCST_FMT "C:%p I:%04x has NULL scst_cmd at %s:%d/%s()!\n",
++               cmd,cmd->IoIndex,
++               __FILE__, __LINE__, __func__);
++        return;
++    }
++    if (!cmd->init) {
++        pr_err(MPT3SCST_FMT "C:%p I:%04x has NULL init at %s:%d/%s()!\n",
++               cmd,cmd->IoIndex,
++               __FILE__, __LINE__, __func__);
++        return;
++    }
++    if (!cmd->init->ioc) {
++        pr_err(MPT3SCST_FMT "C:%p I:%04x has NULL init->ioc at %s:%d/%s()!\n",
++               cmd,cmd->IoIndex,
++               __FILE__, __LINE__, __func__);
++        return;
++    }
++    
++    if (cmd->status_mpi_reply) {
++        u16 IOCStatus = (le16_to_cpu(cmd->status_mpi_reply->IOCStatus) & MPI2_IOCSTATUS_MASK);
++        // Some sort of MPI/transport error occured, lets tell the SCST
++        // stack about it
++        switch (IOCStatus) {
++            case MPI2_IOCSTATUS_TARGET_ABORTED:
++                pr_warn(MPT3SCST_FMT "C:%p I:%04x was MPT aborted at %s:%d/%s()!\n",
++                        cmd,cmd->IoIndex,
++                        __FILE__, __LINE__, __func__);
++                scst_set_delivery_status(cmd->scst_cmd,SCST_CMD_DELIVERY_ABORTED);
++                break;
++            default:
++                pr_err(MPT3SCST_FMT "C:%p I:%04x was MPT failed (iocstatus=0x%04x) at %s:%d/%s()!\n",
++                       cmd,cmd->IoIndex, IOCStatus,
++                       __FILE__, __LINE__, __func__);
++                scst_set_delivery_status(cmd->scst_cmd,SCST_CMD_DELIVERY_FAILED);
++                break;
++        }
++    }
++    
++    if (cmd->scst_cmd->state != SCST_CMD_STATE_XMIT_WAIT) {
++        pr_err(MPT3SCST_FMT "C:%p I:%04x !SCST_CMD_STATE_XMIT_WAIT %s:%d/%s()!\n",
++                cmd,cmd->IoIndex,
++                __FILE__, __LINE__, __func__);
++    } else {
++        DPRINTK("C:%p I:%04x scst_tgt_cmd_done\n",cmd,cmd->IoIndex);
++        scst_tgt_cmd_done(cmd->scst_cmd, SCST_CONTEXT_DIRECT);
++    }
++    
++    if ( MPT3SCST_IOC_STATE_READY != atomic_read(&cmd->init->ioc->state)) {
++        pr_warn(MPT3SCST_FMT "C:%p I:%04x the ioc is not READY at %s:%d/%s()!\n",
++                cmd,cmd->IoIndex,
++                __FILE__, __LINE__, __func__);
++    } else {
++        // remove from ioc->cmd_list
++        spin_lock_irqsave(&cmd->init->ioc->lock,flags);
++        list_del(&cmd->listh);
++        spin_unlock_irqrestore(&cmd->init->ioc->lock,flags);
++        
++        // return the message frame to the IOC
++        mpt3stm_release_command(cmd->init->ioc->iocidx, cmd->IoIndex);
++        kfree(cmd);
++    }
++}
++
++static void
++_stm_status_complete(u8 iocidx, u16 IoIndex,
++                     Mpi2TargetErrorReply_t* mpi_reply) {
++    struct mpt3_cmd *cmd = NULL;
++    struct mpt3_ioc *ioc = mpt3stm_ioc_get_priv(iocidx);
++    unsigned long flags;
++    BUG_ON(!ioc);
++    
++    cmd = _ioindex_to_cmd(ioc,IoIndex);
++    if (!cmd) {
++        pr_err(MPT3SCST_FMT "C:%p I:%04x failed to find a command in list at %s:%d/%s()!\n",
++               NULL,IoIndex,
++               __FILE__, __LINE__, __func__);
++        return;
++    }
++    
++    BUG_ON(!cmd->init);
++    if ( MPT3SCST_INIT_STATE_READY != atomic_read(&cmd->init->state)) {
++        pr_warn(MPT3SCST_FMT "C:%p I:%04x the init/session is not READY at %s:%d/%s()!\n",
++               cmd,IoIndex,
++               __FILE__, __LINE__, __func__);
++        return;
++    }
++    cmd->status_mpi_reply = mpi_reply;
++    INIT_WORK(&cmd->work_entry, _process_status_complete_on_workq);
++    // put this in the workq so that operations are 'normal' instead of inside
++    // IRQ context
++    spin_lock_irqsave(&cmd->init->ioc->lock,flags);
++    queue_work(cmd->init->ioc->workq, &cmd->work_entry);
++    spin_unlock_irqrestore(&cmd->init->ioc->lock,flags);
++}
++
++static void
++_process_assist_complete_on_workq(struct work_struct *work) {
++    struct mpt3_cmd* cmd = container_of(work,struct mpt3_cmd,work_entry);
++    
++    if (SCST_DATA_WRITE == cmd->sg_dir) {
++        int scst_rx_status = SCST_RX_STATUS_SUCCESS;
++        if (cmd->assist_mpi_reply) {
++            int missing_count = cmd->scst_cmd->bufflen
++                - cmd->assist_mpi_reply->TransferCount;
++            
++            pr_err(MPT3SCST_FMT "C:%p I:%04x MPT missing:%d (iocstatus=0x%04x) at %s:%d/%s()!\n",
++                   cmd, cmd->IoIndex,
++                   missing_count,le16_to_cpu(cmd->assist_mpi_reply->IOCStatus),
++                   __FILE__, __LINE__, __func__);
++            
++            scst_cmd_set_write_not_received_data_len(cmd->scst_cmd,
++                                                     missing_count);
++            
++            scst_rx_status = SCST_RX_STATUS_ERROR;
++        }
++        else {
++            DPRINTK("C:%p I:%04x ASSIST (receive) SequenceNum:%d\n",
++                   cmd,cmd->IoIndex,cmd->SequenceNumber);
++        }
++        
++        DPRINTK("C:%p I:%04x ASSIST (receive) complete (%d)(%p)\n",cmd,cmd->IoIndex,scst_rx_status,cmd->assist_mpi_reply);
++        // pass the baton to SCST for further processing
++        scst_rx_data(cmd->scst_cmd,
++                     scst_rx_status,
++                     SCST_CONTEXT_DIRECT);
++    }
++    else if (SCST_DATA_READ == cmd->sg_dir) {
++        DPRINTK("C:%p I:%04x ASSIST (send) complete (%p)\n",cmd,cmd->IoIndex,cmd->assist_mpi_reply);
++        if (cmd->assist_mpi_reply) {
++            // TODO: Some data may have been transmitted, do we care?
++            
++            u16 IOCStatus = (le16_to_cpu(cmd->assist_mpi_reply->IOCStatus) & MPI2_IOCSTATUS_MASK);
++            // Some sort of MPI/transport error occured, lets tell the SCST
++            // stack about it
++            switch (IOCStatus) {
++                case MPI2_IOCSTATUS_TARGET_ABORTED:
++                    pr_err(MPT3SCST_FMT "C:%p I:%04x MPT ABORTED (iocstatus=0x%04x) at %s:%d/%s()!\n",
++                           cmd,cmd->IoIndex,IOCStatus,
++                           __FILE__, __LINE__, __func__);
++                    scst_set_delivery_status(cmd->scst_cmd, SCST_CMD_DELIVERY_ABORTED);
++                    break;
++                default:
++                    pr_err(MPT3SCST_FMT "C:%p I:%04x MPT failed (iocstatus=0x%04x) at %s:%d/%s()!\n",
++                           cmd,cmd->IoIndex,IOCStatus,
++                           __FILE__, __LINE__, __func__);
++                    scst_set_delivery_status(cmd->scst_cmd, SCST_CMD_DELIVERY_FAILED);
++                    break;
++            }
++        }
++        else {
++            DPRINTK("C:%p I:%04x ASSIST (send) SequenceNum:%d\n",
++                   cmd,cmd->IoIndex,cmd->SequenceNumber);
++        }
++        // complete the SCSI protocol
++        _send_status(cmd);
++    }
++    else if (SCST_DATA_NONE == cmd->sg_dir) {
++        DPRINTK("C:%p I:%04x ASSIST (send) complete but dir NODATA?\n",cmd,cmd->IoIndex);
++    }
++    else {
++        pr_warn(MPT3SCST_FMT "C:%p I:%04x not READ, WRITE or NONE? at %s:%d/%s()!\n",
++                cmd,cmd->IoIndex,
++                __FILE__, __LINE__, __func__);
++    }
++}
++
++static void
++_stm_assist_complete(u8 iocidx, u16 IoIndex, u8 IOCSequenceNum,
++                     Mpi2TargetErrorReply_t* mpi_reply)
++{
++    struct mpt3_cmd *cmd = NULL;
++    struct mpt3_ioc *ioc = mpt3stm_ioc_get_priv(iocidx);
++    unsigned long flags;
++    BUG_ON(!ioc);
++    
++    cmd = _ioindex_to_cmd(ioc,IoIndex);
++    if (!cmd) {
++        pr_err(MPT3SCST_FMT "failed to find a command in list for %04x at %s:%d/%s()!\n",
++               IoIndex,
++               __FILE__, __LINE__, __func__);
++        return;
++    }
++    
++    BUG_ON(!cmd->init);
++    if ( MPT3SCST_INIT_STATE_READY != atomic_read(&cmd->init->state)) {
++        pr_warn(MPT3SCST_FMT "C:%p I:%04x the init/session is not READY at %s:%d/%s()!\n",
++                cmd,IoIndex,
++                __FILE__, __LINE__, __func__);
++        return;
++    }
++
++    cmd->assist_mpi_reply = mpi_reply;
++    cmd->SequenceNumber = IOCSequenceNum;
++    INIT_WORK(&cmd->work_entry, _process_assist_complete_on_workq);
++    // put this in the workq so that operations are 'normal' instead of inside
++    // IRQ context
++    spin_lock_irqsave(&cmd->init->ioc->lock,flags);
++    queue_work(cmd->init->ioc->workq, &cmd->work_entry);
++    spin_unlock_irqrestore(&cmd->init->ioc->lock,flags);
++}
++
++
++void (*init_result_fn)(struct scst_session *sess, void *data,
++                       int result);
++
++static void
++_add_init_on_workq(struct work_struct *work)
++{
++    struct mpt3_init *init = container_of(work, struct mpt3_init, work_entry);
++    struct mpt3_cmd *delayed_cmd, *next_cmd;
++    unsigned long flags;
++    
++    sprintf(init->name, "%016llx", init->SASAddress);
++    
++    init->scst_sess = scst_register_session(init->ioc->scst_tgt,
++                                            SCST_NON_ATOMIC,
++                                            init->name,
++                                            init, // tgt_priv
++                                            init, // result_fn_data
++                                            NULL); // _scst_alloc_session_done);
++    if (!init->scst_sess) {
++        spin_lock_irqsave(&init->ioc->lock,flags);
++        list_del(&init->listh);
++        spin_unlock_irqrestore(&init->ioc->lock,flags);
++        kfree(init);
++        pr_err(MPT3SCST_FMT "failed scst_register_session at %s:%d/%s()!\n",
++               __FILE__, __LINE__, __func__);
++        return;
++    }
++    
++    scst_sess_set_tgt_priv(init->scst_sess, init);
++    init->workq = alloc_ordered_workqueue( init->name, 0); // only one thing allowed to run at a time!
++    pr_info(MPT3SCST_FMT "created session for initiator dh:%04x addr:%016llx\n",
++            init->InitiatorDevHandle, init->SASAddress);
++    // signal that we are now accepting commands
++    atomic_set(&init->state,MPT3SCST_INIT_STATE_READY);
++    
++    spin_lock_irqsave(&init->ioc->lock,flags);
++    list_for_each_entry_safe(delayed_cmd,next_cmd,&init->ioc->delayed_cmds,listh) {
++        if ( delayed_cmd->init == init )
++        {
++            // remove from deferred list
++            list_del(&delayed_cmd->listh);
++            
++            // post to work queue
++            INIT_WORK(&delayed_cmd->work_entry, _process_cmd_on_workq);
++            list_add(&delayed_cmd->listh,&init->ioc->cmd_list);
++            queue_work(init->workq, &delayed_cmd->work_entry);
++            pr_info(MPT3SCST_FMT "delayed cmd:%04x posted\n",
++                    delayed_cmd->IoIndex);
++        }
++    }
++    spin_unlock_irqrestore(&init->ioc->lock,flags);
++    
++}
++
++/**
++ * Called by the mpt3sas_stm driver in softirq state
++ * quick check for an existing session for this devHandle
++ * then complete the work on the workq
++ */
++static void
++_stm_initiator_add(u8 iocidx,
++                   MPI2_EVENT_DATA_SAS_INIT_DEV_STATUS_CHANGE *pChange)
++{
++    struct mpt3_ioc *ioc = mpt3stm_ioc_get_priv(iocidx);
++    struct mpt3_init *init = NULL;
++    int devh;
++    u64 *iptr;
++    unsigned long flags;
++    
++    BUG_ON(!ioc);
++    
++    if ( MPT3SCST_IOC_STATE_READY != atomic_read(&ioc->state)) {
++        pr_warn(MPT3SCST_FMT "the ioc:%d is not READY at %s:%d/%s()!\n",
++                iocidx,
++                __FILE__, __LINE__, __func__);
++        return;
++    }
++    
++    devh = le16_to_cpu(pChange->DevHandle);
++    init = _devh_to_init(ioc,devh);
++    if (init) {
++        pr_warn(MPT3SCST_FMT "session (%016llx) already exists for dh:%04x\n",
++                init->SASAddress,devh);
++        return;
++    }
++    
++    init = kzalloc(sizeof(struct mpt3_init),GFP_ATOMIC);
++    if (!init)
++    {
++        pr_err(MPT3SCST_FMT "failed kzalloc at %s:%d/%s()!\n",
++               __FILE__, __LINE__, __func__);
++        return;
++    }
++    atomic_set(&init->state,MPT3SCST_INIT_STATE_NEW);
++    init->ioc = ioc;
++    init->InitiatorDevHandle = devh;
++    iptr = (u64*)&pChange->SASAddress;
++    init->SASAddress = le64_to_cpu( *iptr );
++    
++    INIT_WORK(&init->work_entry, _add_init_on_workq);
++    
++    spin_lock_irqsave(&ioc->lock,flags);
++    list_add(&init->listh,&ioc->init_list);
++    queue_work(ioc->workq, &init->work_entry);
++    spin_unlock_irqrestore(&ioc->lock,flags);
++}
++
++static void
++_remove_init_on_workq(struct work_struct *work)
++{
++    struct mpt3_init *init;
++    u16 devh;
++    u8 iocidx;
++    unsigned long flags;
++    
++    init = container_of(work, struct mpt3_init, work_entry);
++    devh = init->InitiatorDevHandle;
++    iocidx = init->ioc->iocidx;
++    
++    pr_info(MPT3SCST_FMT "removing session for dh:%04x sas addr:%016llx\n",
++            devh, init->SASAddress);
++    // TODO: need to abort all TAs...
++    
++    // TODO: go through cmd list to force abort to SCST
++    
++    // clean out any cmds potentially waiting to process
++    flush_workqueue(init->workq);
++    
++    // unregister the scst session, dont wait for commands to complete
++    // as the host is already gone when we get called here
++    scst_unregister_session(init->scst_sess,
++                            0, // dont wait
++                            NULL); // no callback needed
++    
++    destroy_workqueue(init->workq);
++    init->workq = NULL;
++    
++    // remove session from the IOC's list
++    spin_lock_irqsave(&init->ioc->lock,flags);
++    list_del(&init->listh);
++    spin_unlock_irqrestore(&init->ioc->lock,flags);
++    // remove the object from memory
++    kfree(init);
++    
++    // tell the IOC to release the resources associated with this
++    // initiator so that we will get a discovery event when the initiator
++    // comes back
++    mpt3stm_remove_device(iocidx,devh);
++}
++
++/**
++ * Called by the mpt3sas_stm driver in softirq state
++ * quick check for the session in the ioclist
++ * then complete the work on the workq
++ */
++static void
++_stm_initiator_remove(u8 iocidx,
++                      MPI2_EVENT_DATA_SAS_INIT_DEV_STATUS_CHANGE *pChange)
++{
++    struct mpt3_ioc *ioc = mpt3stm_ioc_get_priv(iocidx);
++    struct mpt3_init *init = NULL;
++    u64 sas_address;
++    int devh;
++    u64 *iptr;
++    unsigned long flags;
++    
++    BUG_ON(!ioc);
++    if ( MPT3SCST_IOC_STATE_READY != atomic_read(&ioc->state)) {
++        pr_warn(MPT3SCST_FMT "the ioc:%d is not READY at %s:%d/%s()!\n",
++                iocidx,
++                __FILE__, __LINE__, __func__);
++        return;
++    }
++    
++    devh = le16_to_cpu(pChange->DevHandle);
++    iptr = (u64*)&pChange->SASAddress;
++    sas_address = le64_to_cpu( *iptr );
++    
++    init = _devh_to_init(ioc,devh);
++    
++    if (!init) {
++        pr_warn(MPT3SCST_FMT "no session found for dh:%04x addr:%016llx\n",
++                devh, sas_address);
++    } else {
++        BUG_ON(sas_address != init->SASAddress);
++        if (MPT3SCST_INIT_STATE_READY != atomic_read(&init->state))
++        {
++            pr_warn(MPT3SCST_FMT "session found for dh:%04x but not READY?\n",
++                    devh);
++            return;
++        }
++        // dont accept any more commands
++        atomic_set(&init->state,MPT3SCST_INIT_STATE_EXITING);
++        
++        // process the removal on a workqueue instead of in ATOMIC/interrupt
++        // context as called from the MPT3SAS->STM->us path
++        INIT_WORK(&init->work_entry, _remove_init_on_workq );
++        
++        spin_lock_irqsave(&ioc->lock,flags);
++        queue_work(ioc->workq, &init->work_entry);
++        spin_unlock_irqrestore(&ioc->lock,flags);
++    }
++}
++
++/*
++ * Called by the mpt3sas_stm layer when an MPI EVENT occurs
++ */
++static void
++_stm_event(u8 iocidx, MPI2_EVENT_NOTIFICATION_REPLY *pevent)
++{
++    switch (le16_to_cpu(pevent->Event)) {
++        case MPI2_EVENT_STATE_CHANGE:
++            // IOC hardware state change (doorbell)
++            DPRINTK("MPI2_EVENT_STATE_CHANGE:%08x\n",mpt3stm_get_iocstate(iocidx,0));
++            break;
++        case MPI2_EVENT_HARD_RESET_RECEIVED:
++            // someone reset the logical bus
++            DPRINTK("HARD RESET FROM REMOTE!\n");
++            break;
++        case MPI2_EVENT_SAS_DEVICE_STATUS_CHANGE:
++            DPRINTK("MPI2_EVENT_SAS_DEVICE_STATUS_CHANGE!\n");
++            // remote devices
++            break;
++        case MPI2_EVENT_SAS_BROADCAST_PRIMITIVE:
++            DPRINTK("MPI2_EVENT_SAS_BROADCAST_PRIMITIVE!\n");
++            break;
++        case MPI2_EVENT_SAS_NOTIFY_PRIMITIVE:
++            DPRINTK("MPI2_EVENT_SAS_NOTIFY_PRIMITIVE!\n");
++            break;
++        case MPI2_EVENT_SAS_INIT_DEVICE_STATUS_CHANGE:
++        {
++            MPI2_EVENT_DATA_SAS_INIT_DEV_STATUS_CHANGE *pChange =
++            (MPI2_EVENT_DATA_SAS_INIT_DEV_STATUS_CHANGE*) &pevent->EventData[0];
++            switch (pChange->ReasonCode) {
++                case MPI2_EVENT_SAS_INIT_RC_ADDED:
++                    _stm_initiator_add(iocidx, pChange);
++                    break;
++                case MPI2_EVENT_SAS_INIT_RC_NOT_RESPONDING:
++                    _stm_initiator_remove(iocidx, pChange);
++                    break;
++                default:
++                    pr_debug(MPT3SCST_FMT "Invalid event notification reason!\n");
++                    break;
++            }
++        }
++            break;
++        case MPI2_EVENT_SAS_INIT_TABLE_OVERFLOW:
++        default:
++            break;
++            // dont need to do anything
++            //            printk(MPT3SCST_FMT "ignored event: %04x\n",pevent->Event);
++    }
++    return;
++}
++
++void _stm_reset(u8 iocidx, int reset_phase)
++{
++    struct mpt3_ioc *ioc = mpt3stm_ioc_get_priv(iocidx);
++    switch (reset_phase) {
++        case MPT3_IOC_PRE_RESET:
++            DPRINTK("I:%d MPT3_IOC_PRE_RESET\n",iocidx);
++            if (ioc) {
++                // TODO: unregister all sessions... and abort all commands
++                atomic_set(&ioc->state,MPT3SCST_IOC_STATE_RESET);
++            }
++            break;
++        case MPT3_IOC_AFTER_RESET:
++            DPRINTK("I%d MPT3_IOC_AFTER_RESET\n", iocidx);
++            break;
++        case MPT3_IOC_DONE_RESET:
++            DPRINTK("I%d MPT3_IOC_DONE_RESET\n", iocidx);
++            atomic_set(&ioc->state,MPT3SCST_IOC_STATE_READY);
++            break;
++    }
++    
++}
++
++MPT3STM_DISPATCH _dispatch_table = {
++    .stm_reset = _stm_reset,
++    .stm_event = _stm_event,
++    .stm_command = _stm_command_received,
++    .stm_assist_complete = _stm_assist_complete,
++    .stm_status_complete = _stm_status_complete,
++    .driver = MPT3SCST_DRIVER_NAME,
++};
++
++
++static struct scst_tgt_template tgt_template = {
++    .name = MPT3SCST_DRIVER_NAME,
++    .sg_tablesize = 1, /* FIXME */
++    .use_clustering = 1,
++    .xmit_response_atomic = 0,
++    .rdy_to_xfer_atomic = 0,
++//#else
++//    .xmit_response_atomic = 1,  // async operation
++//    .rdy_to_xfer_atomic = 1,
++//#endif
++    .xmit_response = _scst_xmit_response,
++    .rdy_to_xfer = _scst_rdy_to_xfer,
++    //      .on_hw_pending_cmd_timeout
++    // .on_free_cmd = _scst_on_free_cmd,
++    //      .tgt_alloc_data_buff
++    //      .preprocessing_done
++    //      .pre_exec
++    //      .task_mgmt_affected_cmds_done
++    .task_mgmt_fn_done = _scst_task_mgmt_fn_done,
++    //      .on_abort_cmd
++    //      .detect
++    .release = _scst_release,
++    //      .get_initiator_port_transport_id  TODO!!
++    .enable_target = _scst_enable_tgt,
++    .is_target_enabled = _scst_is_tgt_enabled,
++};
++
++static void __exit _mpt3scst_exit(void)
++{
++    int i;
++    struct mpt3_ioc *ioc;
++
++    // remove all of the IOCs
++    for (i = 0; i < gmpt3scst_dd_t.portmap.num_ports; i++) {
++        ioc = mpt3stm_ioc_get_priv(gmpt3scst_dd_t.portmap.port[i].iocidx);
++        if (ioc) {
++            // TODO: unregister all sessions...
++            atomic_set(&ioc->state,MPT3SCST_IOC_STATE_EXITING);
++            if (ioc->workq)
++            {
++                flush_workqueue(ioc->workq);
++            }
++            scst_unregister_target(ioc->scst_tgt);
++            mpt3stm_ioc_set_priv(gmpt3scst_dd_t.portmap.port[i].iocidx,NULL);
++            if (ioc->workq)
++            {
++                destroy_workqueue(ioc->workq);
++            }
++            ioc->workq = NULL;
++            
++        }
++        mpt3stm_deregister(gmpt3scst_dd_t.portmap.port[i].iocidx);
++    }
++    
++    // remove ourselves from the SCST interface
++    scst_unregister_target_template(&tgt_template);
++    
++    return;
++}
++
++static int __init _mpt3scst_init(void)
++{
++    int res = 0;
++    int i;
++    struct mpt3_ioc *ioc;
++    char name[32];
++
++    pr_warn(MPT3SCST_FMT "Starting target driver!\n");
++    
++    //    tgt_template.vendor = _mpt3scst_vendor;
++    memset(&gmpt3scst_dd_t,0,sizeof(gmpt3scst_dd_t));
++
++    // put in a reasonable number of SGLs
++    tgt_template.sg_tablesize = mpt3stm_get_max_sges(0);
++    res = scst_register_target_template(&tgt_template);
++    if (res < 0)
++        goto out;
++    
++    mpt3stm_get_portmap(&gmpt3scst_dd_t.portmap);
++    
++    for (i = 0; i < gmpt3scst_dd_t.portmap.num_ports; i++) {
++        res = mpt3stm_register(gmpt3scst_dd_t.portmap.port[i].iocidx,
++            &_dispatch_table );
++        if ( res ) {
++            pr_err(MPT3SCST_FMT " failed mpt3stm_register() at %s:%d/%s()!\n",
++                     __FILE__, __LINE__, __func__);
++            goto out_unreg_target;
++        }
++        ioc = kzalloc(sizeof(struct mpt3_ioc),GFP_KERNEL);
++        ioc->iocidx = i;
++        atomic_set(&ioc->state,MPT3SCST_IOC_STATE_NEW);
++
++        ioc->max_sg_ents = mpt3stm_get_max_sges(i);
++        
++        INIT_LIST_HEAD(&ioc->init_list);
++        INIT_LIST_HEAD(&ioc->cmd_list);
++        INIT_LIST_HEAD(&ioc->delayed_cmds);
++        spin_lock_init(&ioc->lock);
++        
++        snprintf(name, sizeof(name), "%s_%d",
++                 mpt3stm_get_adapter_name(ioc->iocidx), i);
++        ioc->workq = alloc_workqueue( name,
++                                      WQ_UNBOUND,
++                                      0 ); // use default max_active
++
++        ioc->scst_tgt = scst_register_target(&tgt_template, name );
++        if (!ioc->scst_tgt) {
++            pr_err(MPT3SCST_FMT " scst_register_target() failed");
++            
++            res = -ENODEV;
++            goto out;
++        }
++        
++        scst_tgt_set_tgt_priv(ioc->scst_tgt, ioc);
++        mpt3stm_ioc_set_priv(gmpt3scst_dd_t.portmap.port[i].iocidx,ioc);
++        atomic_set(&ioc->state,MPT3SCST_IOC_STATE_READY);
++    }
++    
++out:
++    
++    return res;
++    
++out_unreg_target:
++    _mpt3scst_exit();
++    goto out;
++}
++
++module_init(_mpt3scst_init);
++module_exit(_mpt3scst_exit);
+Index: mpt3/mpt3_scst.h
+===================================================================
+--- mpt3/mpt3_scst.h	(revision 0)
++++ mpt3/mpt3_scst.h	(working copy)
+@@ -0,0 +1,182 @@
++/**
++ *
++ * @file mpt3scst.h
++ * @brief SCST driver for LSI FusionMPT2.5 (SAS 3.0) controllers
++ * @author Theodore Vaida
++ *
++ * @Copyright � 2015 Exact Assembly, LLC.  All Rights Reserved.
++ *
++ *	 Redistribution and use in source and binary forms, with or without modification,
++ *	are permitted provided that the following conditions are met:
++ *
++ *	1. Redistributions of source code must retain the above copyright notice,
++ *		this list of conditions and the following disclaimer.
++ *
++ *	2. Redistributions in binary form must reproduce the above copyright notice,
++ *		this list of conditions and the following disclaimer in the documentation and/or
++ *		other materials provided with the distribution.
++ *
++ *	3. The name of the author may not be used to endorse or promote products derived from this
++ *		software without specific prior written permission.
++ *
++ *	THIS SOFTWARE IS PROVIDED BY [LICENSOR] "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,
++ *	BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ *	PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
++ *	INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ *	PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ *	INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ *	LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
++ *	OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ *
++ *
++ * @details This module deals with the mpt3sas specifics of SCSI Target mode
++ *
++ */
++
++#ifndef __MPT3SCST_H
++#define __MPT3SCST_H
++
++#include <linux/module.h>
++
++#include <linux/delay.h>
++#include <linux/errno.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/slab.h>
++#include <linux/miscdevice.h>
++#include <linux/proc_fs.h>
++#include <linux/highmem.h>
++#include <linux/version.h>
++#include <scsi/scsi_device.h>
++#include <linux/spinlock.h>
++
++#include <asm/uaccess.h>
++#include <asm/io.h>
++#include <asm/div64.h>
++
++#include "mpi/mpi2_type.h"
++#include "mpi/mpi2.h"
++#include "mpi/mpi2_ioc.h"
++#include "mpi/mpi2_cnfg.h"
++#include "mpi/mpi2_init.h"
++#include "mpi/mpi2_raid.h"
++#include "mpi/mpi2_tool.h"
++#include "mpi/mpi2_sas.h"
++#include "mpi/mpi2_targ.h"
++
++#include "mpt3sas_stm.h"
++
++#include "../include/scst.h"
++#include "../include/scst_debug.h"
++
++/*****************************************************************************/
++
++#define MPT3SCST_DRIVER_NAME          "mpt3_scst"
++#define MPT3SCST_FMT    "mpt3_scst:"
++
++struct mpt3_initiator;
++struct mpt3_ioc;
++
++/* Session's flags */
++#define MPT3SCST_SESS_INITING            0   /* The session is being unregistered */
++#define MPT3SCST_SESS_SHUTDOWN           1   /* The session is being unregistered */
++
++#define MPT3SCST_CMD_NEW            (0)
++#define MPT3SCST_CMD_DATA_PHASE     (1)
++#define MPT3SCST_CMD_STATUS_PHASE   (2)
++#define MPT3SCST_CMD_DONE           (8)
++
++#define SAS_SSP_TSKMGMTFUNCTION_ABORT_TASK              (0x01)
++#define SAS_SSP_TSKMGMTFUNCTION_ABORT_TASK_SET          (0x02)
++#define SAS_SSP_TSKMGMTFUNCTION_CLEAR_TASK_SET          (0x04)
++#define SAS_SSP_TSKMGMTFUNCTION_LOGICAL_UNIT_RESET      (0x08)
++#define SAS_SSP_TSKMGMTFUNCTION_I_T_NEXUS_RESET         (0x10)
++#define SAS_SSP_TSKMGMTFUNCTION_CLEAR_ACA               (0x40)
++#define SAS_SSP_TSKMGMTFUNCTION_QUERY_TASK              (0x80)
++#define SAS_SSP_TSKMGMTFUNCTION_QUERY_TASK_SET          (0x81)
++#define SAS_SSP_TSKMGMTFUNCTION_QUERY_ASYNCHRONOUS_EVENT (0x82)
++
++struct mpt3_cmd
++{
++    struct work_struct work_entry; // work_entry used by init->workq for cmds
++    
++    struct mpt3_init *init;
++    struct list_head listh; // ioc->cmd_list
++    struct scst_cmd *scst_cmd;
++
++    dma_addr_t dma_handle;
++    
++    scst_data_direction sg_dir;
++    struct scatterlist *sg;
++    int sg_cnt;
++    int mapped_sg_cnt;
++    int dma_size;
++    
++    // MPT specific bits
++    u16 IoIndex;
++    u8 SequenceNumber;
++    Mpi2TargetErrorReply_t* assist_mpi_reply;
++    Mpi2TargetErrorReply_t* status_mpi_reply;
++    
++    // ANSI SCSI T10 specified bits
++    u16 InitiatorConnectionTag;
++    u8 FrameType;
++    u16 SSPFlags;
++    u16 TargetPortTransferTag;
++    u16 QueueTag;
++    u32 DataOffset;
++    U8      LogicalUnitNumber[8];                       /* 0x18 */
++    u8 TaskManagementFunction;
++    u8 TaskAttribute;
++    u16 ManagedTaskTag;
++    U8      CDB[16];                                    /* 0x24 */
++};
++
++#define MPT3SCST_INIT_STATE_NEW (0)
++#define MPT3SCST_INIT_STATE_READY (1)
++#define MPT3SCST_INIT_STATE_EXITING (-2)
++
++struct mpt3_init
++{
++    struct scst_session *scst_sess;
++    struct mpt3_ioc *ioc;
++    atomic_t state;
++    
++    struct list_head listh; // handle for ioc->init_list
++    struct work_struct work_entry; // work_entry used by ioc->workq add/remove
++    
++    u16 InitiatorDevHandle;
++    u64 SASAddress;
++    char name[32];
++    unsigned long sess_flags;
++    
++    struct workqueue_struct *workq; // work queue for cmd_list
++};
++
++#define MPT3SCST_IOC_STATE_NEW (0)
++#define MPT3SCST_IOC_STATE_READY (1)
++#define MPT3SCST_IOC_STATE_RESET (-1)
++#define MPT3SCST_IOC_STATE_EXITING (-2)
++
++struct mpt3_ioc
++{
++    u8 iocidx;
++    atomic_t state;
++
++    u8 max_sg_ents;
++    struct scst_tgt *scst_tgt;
++    
++    spinlock_t lock;
++    struct list_head init_list;
++    struct list_head cmd_list;
++    struct list_head delayed_cmds; // where to put commands before init is READY
++    struct workqueue_struct *workq; // work queue for init_list
++};
++
++typedef struct mpt3scst_dd
++{
++    struct mpt3stm_ports portmap;
++} mpt3scst_dd_t;
++
++
++#endif
+Index: scst/src/Makefile
+===================================================================
+--- scst/src/Makefile	(revision 6459)
++++ scst/src/Makefile	(working copy)
+@@ -37,7 +37,6 @@
+ 
+ ifneq ($(PATCHLEVEL),)
+ SCST_INC_DIR := $(SUBDIRS)/../include
+-
+ obj-m := scst.o
+ 
+ scst-y        += scst_main.o
+@@ -55,18 +54,23 @@
+ 
+ else
+ ######### BEGIN OUT-OF-TREE RULES #########
+-
+ ifeq ($(KVER),)
+   ifeq ($(KDIR),)
+     KVER := $(shell uname -r)
+     KDIR := /lib/modules/$(KVER)/build
+   else
+-    KVER := $(strip $(shell						\
+-	cat $(KDIR)/include/config/kernel.release 2>/dev/null ||	\
+-	make -s -C $(KDIR) kernelversion))
++    ifeq ($(KERNELRELEASE),)
++      KVER := $(strip $(shell						\
++	  cat $(KDIR)/include/config/kernel.release 2>/dev/null ||	\
++	  make -s -C $(KDIR) kernelversion))
++    else
++      KVER := $(KERNELRELEASE)
++    endif
+   endif
+ else
+-  KDIR := /lib/modules/$(KVER)/build
++  ifeq ($(KDIR),)
++    KDIR := /lib/modules/$(KVER)/build
++  endif
+ endif
+ 
+ ifeq ($(INSTALL_MOD_PATH),)
+@@ -97,8 +101,11 @@
+ 
+ # The file Modules.symvers has been renamed in the 2.6.18 kernel to
+ # Module.symvers. Find out which name to use by looking in $(KDIR).
+-MODULE_SYMVERS:=$(shell if [ -e $(KDIR)/Module.symvers ]; then \
+-		       echo Module.symvers; else echo Modules.symvers; fi)
++#MODULE_SYMVERS:=$(shell if [ -e $(KDIR)/Module.symvers ]; then \
++#		       echo Module.symvers; else echo Modules.symvers; fi)
++# TV- Yocto builds in a different directory than KDIR, so we just go ahead and
++# set the value 
++MODULE_SYMVERS:=Module.symvers
+ 
+ install: all
+ 	@if [ -z "$(DESTDIR)" ] && \
+@@ -106,10 +113,9 @@
+ 	echo Error: the scst and/or scst-devel RPMs must be uninstalled first; \
+ 	false; fi
+ 	-rm -f $(INSTALL_DIR)/scsi_tgt.ko
+-	install -d $(INSTALL_DIR)
+-	install -d $(INSTALL_DIR)/dev_handlers
+-	install -m 644 dev_handlers/*.ko $(INSTALL_DIR)/dev_handlers
+-	install -m 644 scst.ko $(INSTALL_DIR)
++	$(MAKE) -C $(KDIR) SUBDIRS=$(shell pwd) BUILD_INI=m \
++		$$([ -n "$(DESTDIR)$(INSTALL_MOD_PATH)" ] && echo DEPMOD=true) \
++		modules_install
+ 	install -d $(INSTALL_DIR_H)
+ 	install -m 644 ../include/scst.h $(INSTALL_DIR_H)
+ 	install -m 644 ../include/scst_sgv.h $(INSTALL_DIR_H)
